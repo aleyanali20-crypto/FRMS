@@ -1,5 +1,5 @@
-import Sidebar from "../../layouts/Sidebar";
-import Navbar from "../../layouts/Navbar";
+import Sidebar from "../../components/layout/Sidebar";
+import Navbar from "../../components/layout/Navbar";
 
 const Dashboard = () => {
   return (
