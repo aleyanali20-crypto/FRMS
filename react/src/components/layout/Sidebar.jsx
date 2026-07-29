@@ -25,9 +25,15 @@ const Sidebar = () => {
   </Link>
 </li>
 
-        <li className="flex items-center gap-3 cursor-pointer hover:text-yellow-300">
-          <FaWarehouse /> Factory Units
-        </li>
+        <li>
+  <Link
+    to="/admin/units"
+    className="flex items-center gap-3 hover:text-yellow-300"
+  >
+    <FaWarehouse />
+    Factory Units
+  </Link>
+</li>
 
        <li>
   <Link
