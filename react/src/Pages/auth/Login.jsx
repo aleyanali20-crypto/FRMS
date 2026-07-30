@@ -1,11 +1,48 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash, FaBuilding } from "react-icons/fa";
+import API from "../../api/tenantApi";
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (e) => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    try {
+     const response = await API.post("/auth/login", formData);
+
+// Save Token
+localStorage.setItem("token", response.data.token);
+
+// Save User
+localStorage.setItem("user", JSON.stringify(response.data.user));
+
+alert("Login Successful");
+
+if (response.data.role === "admin") {
+  navigate("/admin/dashboard");
+} else {
+  navigate("/tenant/dashboard");
+}
+    } catch (error) {
+      console.error(error);
+      alert("Invalid Email or Password");
+    }
   };
 
   return (
@@ -15,6 +52,7 @@ const Login = () => {
         {/* Left Side */}
         <div className="hidden md:flex flex-col justify-center items-center bg-blue-600 text-white p-10">
           <FaBuilding size={80} />
+
           <h1 className="text-4xl font-bold mt-6">
             FRMS
           </h1>
@@ -42,6 +80,7 @@ const Login = () => {
 
           <form onSubmit={handleSubmit} className="mt-8">
 
+            {/* Email */}
             <div className="mb-5">
               <label className="block font-semibold mb-2">
                 Email
@@ -49,11 +88,16 @@ const Login = () => {
 
               <input
                 type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="Enter Email"
                 className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
               />
             </div>
 
+            {/* Password */}
             <div className="mb-5">
               <label className="block font-semibold mb-2">
                 Password
@@ -63,8 +107,12 @@ const Login = () => {
 
                 <input
                   type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
                   placeholder="Enter Password"
                   className="w-full border rounded-xl px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
                 />
 
                 <button
@@ -78,6 +126,7 @@ const Login = () => {
               </div>
             </div>
 
+            {/* Remember */}
             <div className="flex justify-between items-center mb-6">
 
               <label className="flex items-center gap-2 text-sm">
@@ -94,7 +143,9 @@ const Login = () => {
 
             </div>
 
+            {/* Login */}
             <button
+              type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition"
             >
               Login
