@@ -21,30 +21,31 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-     const response = await API.post("/auth/login", formData);
+  try {
+    const response = await API.post("/auth/login", formData);
 
-// Save Token
-localStorage.setItem("token", response.data.token);
+    console.log("LOGIN RESPONSE:", response.data);
 
-// Save User
-localStorage.setItem("user", JSON.stringify(response.data.user));
+    localStorage.setItem("token", response.data.token);
+    localStorage.setItem("user", JSON.stringify(response.data.user));
 
-alert("Login Successful");
+    console.log("TOKEN AFTER SAVE:", localStorage.getItem("token"));
 
-if (response.data.role === "admin") {
-  navigate("/admin/dashboard");
-} else {
-  navigate("/tenant/dashboard");
-}
-    } catch (error) {
-      console.error(error);
-      alert("Invalid Email or Password");
+    alert("Login Successful");
+
+    if (response.data.role === "admin") {
+      navigate("/admin/dashboard");
+    } else {
+      navigate("/tenant/dashboard");
     }
-  };
 
+  } catch (error) {
+    console.error(error);
+    alert("Invalid Email or Password");
+  }
+};
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-700 to-indigo-900 flex items-center justify-center p-6">
       <div className="bg-white rounded-3xl shadow-2xl overflow-hidden w-full max-w-5xl grid md:grid-cols-2">

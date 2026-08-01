@@ -45,10 +45,16 @@ const Sidebar = () => {
   </Link>
 </li>
 
-        <li className="flex items-center gap-3 cursor-pointer hover:text-yellow-300">
-          <FaMoneyBill /> Rent Collection
-        </li>
 
+        <li>
+  <Link
+    to="/admin/rent-collection"
+    className="flex items-center gap-3 hover:text-yellow-300"
+  >
+    <FaMoneyBill />
+    Rent Collection
+  </Link>
+</li>
         <li className="flex items-center gap-3 cursor-pointer hover:text-yellow-300">
           <FaReceipt /> Expenses
         </li>

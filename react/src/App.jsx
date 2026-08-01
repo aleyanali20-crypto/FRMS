@@ -5,6 +5,8 @@ import Register from "./Pages/auth/Register";
 import Login from "./Pages/auth/Login";
 import Dashboard from "./Pages/Admin/Dashboard";
 import TenantDashboard from "./Pages/tenant/Tenant";
+import RentPayment from "./Pages/tenant/RentPayment";
+import RentCollection from "./Pages/Admin/RentCollection";
 
 function App() {
   return (
@@ -16,6 +18,11 @@ function App() {
         <Route path="/admin/tenants" element={<Tenants />} />
         <Route path="/admin/units" element={<Units />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/tenant/rent" element={<RentPayment />} />
+        <Route
+  path="/admin/rent-collection"
+  element={<RentCollection />}
+/>
       </Routes>
     </BrowserRouter>
   );

@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import API from "../../api/tenantApi";
 
 const TenantDashboard = () => {
+  const navigate = useNavigate();
+
   const [tenant, setTenant] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -45,7 +48,16 @@ const TenantDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <h1 className="text-3xl font-bold mb-6">Tenant Dashboard</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Tenant Dashboard</h1>
+
+        <button
+          onClick={() => navigate("/tenant/rent")}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg"
+        >
+          Pay Rent
+        </button>
+      </div>
 
       <div className="bg-white shadow-lg rounded-xl p-6 space-y-4">
         <div>
