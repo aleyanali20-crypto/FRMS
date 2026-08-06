@@ -7,7 +7,6 @@ export const uploadRent = async (req, res) => {
   try {
     const { month, year, amount } = req.body;
 
-    // Logged-in User
     const user = await User.findById(req.user.id);
 
     if (!user) {
@@ -17,7 +16,6 @@ export const uploadRent = async (req, res) => {
       });
     }
 
-    // Find Tenant
     const tenant = await Tenant.findOne({
       email: user.email,
     });
@@ -29,7 +27,6 @@ export const uploadRent = async (req, res) => {
       });
     }
 
-    // Slip Required
     if (!req.file) {
       return res.status(400).json({
         success: false,
@@ -37,7 +34,6 @@ export const uploadRent = async (req, res) => {
       });
     }
 
-    // Duplicate Check
     const alreadyPaid = await Rent.findOne({
       tenant: tenant._id,
       month,
@@ -51,7 +47,6 @@ export const uploadRent = async (req, res) => {
       });
     }
 
-    // Save Payment
     const rent = await Rent.create({
       tenant: tenant._id,
       tenantName: tenant.name,
@@ -168,6 +163,47 @@ export const approvePayment = async (req, res) => {
       success: false,
       message: error.message,
     });
+
+  }
+};
+
+// ================= Delete Rent =================
+export const deleteRent = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+if (  user.role !== "superadmin") {
+  return res.status(403).json({
+    success: false,
+    message: "Only Admin or Super Admin can delete",
+  });
+}
+
+    const rent = await Rent.findById(req.params.id);
+
+    if (!rent) {
+      return res.status(404).json({
+        success: false,
+        message: "Rent record not found.",
+      });
+    }
+
+    await Rent.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({
+      success: true,
+      message: "Rent deleted successfully.",
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+
   }
 };
 
@@ -222,7 +258,6 @@ export const addCashPayment = async (req, res) => {
       remarks,
     } = req.body;
 
-    // Check Tenant
     const tenant = await Tenant.findById(tenantId);
 
     if (!tenant) {
@@ -232,7 +267,6 @@ export const addCashPayment = async (req, res) => {
       });
     }
 
-    // Duplicate Check
     const alreadyPaid = await Rent.findOne({
       tenant: tenantId,
       month,
@@ -246,7 +280,6 @@ export const addCashPayment = async (req, res) => {
       });
     }
 
-    // Save Cash Payment
     const rent = await Rent.create({
       tenant: tenant._id,
       tenantName: tenant.name,

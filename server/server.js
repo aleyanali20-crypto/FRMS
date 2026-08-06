@@ -8,6 +8,11 @@ import rentRoutes from "./routes/rentRoutes.js";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import path from "path";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
+import expenseRoutes from "./routes/expenseRoutes.js";
+import superAdminRoutes from "./routes/superAdminRoutes.js";
+import accountantRoutes from "./routes/accountantRoutes.js";
+
 
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
@@ -27,6 +32,11 @@ app.use("/api/auth", authRoutes);
 app.use("/api/tenants", tenantRoutes);
 app.use("/api/units", unitRoutes);
 app.use("/api/rents", rentRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/expenses", expenseRoutes);
+app.use("/api/superadmin", superAdminRoutes);
+app.use("/api/accountant", accountantRoutes);
+
 app.get("/", (req, res) => {
   res.send("FRMS API Running...");
 });

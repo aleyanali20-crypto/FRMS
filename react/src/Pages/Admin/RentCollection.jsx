@@ -136,6 +136,41 @@ const RentCollection = () => {
       console.log(error);
     }
   };
+  // ================= Delete Rent =================
+
+const deleteRent = async (id) => {
+
+  const confirmDelete = window.confirm(
+    "Are you sure you want to delete this rent record?"
+  );
+
+  if (!confirmDelete) return;
+
+  try {
+
+    await API.delete(`/rents/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    alert("Rent Deleted Successfully");
+
+    fetchPendingPayments();
+    fetchPaymentHistory();
+
+  } catch (error) {
+
+    console.log(error);
+
+    alert(
+      error.response?.data?.message ||
+      "Delete Failed"
+    );
+
+  }
+
+};
 
   // ================= Cash Form =================
 
@@ -251,6 +286,9 @@ return (
                   <th className="border p-2">Amount</th>
                   <th className="border p-2">Slip</th>
                   <th className="border p-2">Action</th>
+                  <th className="border p-2">
+  Action
+</th>
                 </tr>
 
               </thead>
@@ -305,25 +343,49 @@ return (
                         )}
 
                       </td>
+                      <td className="border p-2">
+  {localStorage.getItem("role") === "admin" && (
+    <button
+      onClick={() => deleteRent(item._id)}
+      className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
+    >
+      Delete
+    </button>
+  )}
+</td>
 
                       <td className="border p-2">
 
-                        <button
-                          onClick={() => approvePayment(item._id)}
-                          className="bg-green-600 text-white px-3 py-1 rounded mr-2"
-                        >
-                          Approve
-                        </button>
+  <div className="flex gap-2">
 
-                        <button
-                          onClick={() => rejectPayment(item._id)}
-                          className="bg-red-600 text-white px-3 py-1 rounded"
-                        >
-                          Reject
-                        </button>
+    <button
+      onClick={() => approvePayment(item._id)}
+      className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded"
+    >
+      Approve
+    </button>
 
-                      </td>
+    <button
+      onClick={() => rejectPayment(item._id)}
+      className="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded"
+    >
+      Reject
+    </button>
 
+    {localStorage.getItem("role") === "admin" && (
+
+      <button
+        onClick={() => deleteRent(item._id)}
+        className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
+      >
+        Delete
+      </button>
+
+    )}
+
+  </div>
+
+</td>
                     </tr>
 
                   ))
@@ -526,16 +588,16 @@ return (
               <thead className="bg-gray-100">
 
                 <tr>
-                  <th className="border p-2">Tenant</th>
-                  <th className="border p-2">Unit</th>
-                  <th className="border p-2">Month</th>
-                  <th className="border p-2">Year</th>
-                  <th className="border p-2">Method</th>
-                  <th className="border p-2">Amount</th>
-                  <th className="border p-2">Status</th>
-                  <th className="border p-2">Slip</th>
-                </tr>
-
+  <th className="border p-2">Tenant</th>
+  <th className="border p-2">Unit</th>
+  <th className="border p-2">Month</th>
+  <th className="border p-2">Year</th>
+  <th className="border p-2">Method</th>
+  <th className="border p-2">Amount</th>
+  <th className="border p-2">Status</th>
+  <th className="border p-2">Slip</th>
+  <th className="border p-2">Action</th>
+</tr>
               </thead>
 
               <tbody>
@@ -627,6 +689,16 @@ return (
                         )}
 
                       </td>
+                      <td className="border p-2">
+
+  <button
+    onClick={() => deleteRent(item._id)}
+    className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
+  >
+    Delete
+  </button>
+
+</td>
 
                     </tr>
 

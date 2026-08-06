@@ -20,30 +20,50 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+ const handleSubmit = async (e) => {
   e.preventDefault();
 
   try {
-    const response = await API.post("/auth/login", formData);
+    const res = await API.post("/auth/login", formData);
 
-    console.log("LOGIN RESPONSE:", response.data);
+    // Save Data
+    localStorage.setItem("token", res.data.token);
+    localStorage.setItem("role", res.data.user.role);
+    localStorage.setItem("user", JSON.stringify(res.data.user));
 
-    localStorage.setItem("token", response.data.token);
-    localStorage.setItem("user", JSON.stringify(response.data.user));
+    const role = res.data.user.role;
 
-    console.log("TOKEN AFTER SAVE:", localStorage.getItem("token"));
+    console.log("ROLE:", role);
 
-    alert("Login Successful");
+    // Role Based Redirect
+    switch (role) {
+      case "superadmin":
+        navigate("/superadmin/dashboard");
+        break;
 
-    if (response.data.role === "admin") {
-      navigate("/admin/dashboard");
-    } else {
-      navigate("/tenant/dashboard");
+      case "admin":
+        navigate("/admin/dashboard");
+        break;
+
+      case "accountant":
+        navigate("/accountant/dashboard");
+        break;
+
+      case "tenant":
+        navigate("/tenant/dashboard");
+        break;
+
+      default:
+        navigate("/");
     }
 
   } catch (error) {
-    console.error(error);
-    alert("Invalid Email or Password");
+    console.log(error);
+
+    alert(
+      error.response?.data?.message ||
+      "Invalid Email or Password"
+    );
   }
 };
   return (

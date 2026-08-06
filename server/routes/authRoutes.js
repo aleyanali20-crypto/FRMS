@@ -5,7 +5,7 @@ import {
   getProfile,
 } from "../controllers/authController.js";
 
-import authMiddleware from "../middleware/authMiddleware.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -16,6 +16,6 @@ router.post("/register", register);
 router.post("/login", login);
 
 // Get Logged-in User Profile
-router.get("/profile", authMiddleware, getProfile);
+router.get("/profile", protect, getProfile);
 
 export default router;

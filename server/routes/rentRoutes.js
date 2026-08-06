@@ -1,6 +1,6 @@
 import express from "express";
 import upload from "../middleware/upload.js";
-import authMiddleware from "../middleware/authMiddleware.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 import {
   uploadRent,
@@ -9,6 +9,7 @@ import {
   approvePayment,
   rejectPayment,
   addCashPayment,
+  deleteRent,
 } from "../controllers/rentController.js";
 
 const router = express.Router();
@@ -16,7 +17,7 @@ const router = express.Router();
 // Upload Rent Slip
 router.post(
   "/upload",
-  authMiddleware,
+  protect,
   upload.single("slip"),
   uploadRent
 );
@@ -24,20 +25,43 @@ router.post(
 // Cash Payment
 router.post(
   "/cash",
-  authMiddleware,
+  protect,
   addCashPayment
 );
 
 // Get All Payments
-router.get("/", authMiddleware, getPayments);
+router.get(
+  "/",
+  protect,
+  getPayments
+);
 
 // Get Pending Payments
-router.get("/pending", authMiddleware, getPendingPayments);
+router.get(
+  "/pending",
+  protect,
+  getPendingPayments
+);
 
 // Approve Payment
-router.put("/approve/:id", authMiddleware, approvePayment);
+router.put(
+  "/approve/:id",
+  protect,
+  approvePayment
+);
 
 // Reject Payment
-router.put("/reject/:id", authMiddleware, rejectPayment);
+router.put(
+  "/reject/:id",
+  protect,
+  rejectPayment
+);
+
+// Delete Rent
+router.delete(
+  "/:id",
+  protect,
+  deleteRent
+);
 
 export default router;
